@@ -82,11 +82,10 @@ pub trait ToBytes {
     /// assert_eq!(bytes, expected)
     /// ```
     fn to_ne_bytes(&self) -> Self::Bytes {
-        #[cfg(target_endian = "big")]
-        let bytes = self.to_be_bytes();
-        #[cfg(target_endian = "little")]
-        let bytes = self.to_le_bytes();
-        bytes
+        cfg_select! {
+            target_endian = "big" => self.to_be_bytes(),
+            _ => self.to_le_bytes(),
+        }
     }
 }
 
@@ -140,11 +139,10 @@ pub trait FromBytes: Sized {
     /// assert_eq!(value, 0x12345678)
     /// ```
     fn from_ne_bytes(bytes: &Self::Bytes) -> Self {
-        #[cfg(target_endian = "big")]
-        let this = Self::from_be_bytes(bytes);
-        #[cfg(target_endian = "little")]
-        let this = Self::from_le_bytes(bytes);
-        this
+        cfg_select! {
+            target_endian = "big" => Self::from_be_bytes(bytes),
+            _ => Self::from_le_bytes(bytes),
+        }
     }
 }
 
