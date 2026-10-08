@@ -32,3 +32,6 @@ i128 = []
 
 [build-dependencies]
 autocfg = "1"
+
+[lints.rust]
+unexpected_cfgs = { level = "warn", check-cfg = ['cfg(target_abi, values("polyasm"))'] }

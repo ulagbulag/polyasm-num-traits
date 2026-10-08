@@ -84,7 +84,7 @@ pub trait ToBytes {
     fn to_ne_bytes(&self) -> Self::Bytes {
         #[cfg(target_endian = "big")]
         let bytes = self.to_be_bytes();
-        #[cfg(target_endian = "little")]
+        #[cfg(any(target_endian = "little", target_abi = "polyasm"))]
         let bytes = self.to_le_bytes();
         bytes
     }
@@ -142,7 +142,7 @@ pub trait FromBytes: Sized {
     fn from_ne_bytes(bytes: &Self::Bytes) -> Self {
         #[cfg(target_endian = "big")]
         let this = Self::from_be_bytes(bytes);
-        #[cfg(target_endian = "little")]
+        #[cfg(any(target_endian = "little", target_abi = "polyasm"))]
         let this = Self::from_le_bytes(bytes);
         this
     }
